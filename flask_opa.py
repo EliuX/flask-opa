@@ -1,4 +1,9 @@
+"""
+Flask Extension for OPA
+"""
 import requests
+
+__version__ = "0.1"
 
 
 class OPAException(Exception):
@@ -8,7 +13,7 @@ class OPAException(Exception):
         super().__init__(message)
 
 
-class OPAUnexpectedException(Exception):
+class OPAUnexpectedException(OPAException):
     """Unexpected error evaluating the request in OPA"""
 
     def __init__(self, message='Unexpected error'):
@@ -23,20 +28,23 @@ class AccessDeniedException(OPAException):
 
 
 class OPA(object):
-    def __init__(self, app, input_function, deny_on_opa_fail=True):
+    def __init__(self, app, input_function, url=None, allow_function=None):
         self.app = app
         self._input_function = input_function
-        self.deny_on_opa_fail = deny_on_opa_fail
+        self._allow_function = allow_function or self.default_allow_function
+        self._deny_on_opa_fail = app.config.get('OPA_DENY_ON_FAIL', True)
+        self._url = url or app.config.get('OPA_URL')
 
     def init_app(self, app):
-        app.config.setdefault('OPA_URL', 'http://localhost:8181')
         self.app.before_request(self.check_authorization)
+        if not self.url:
+            raise ValueError('OPA_URL is not present in the configuration')
 
     def check_authorization(self):
         input = self.input
         url = self.url
         self.app.logger.debug("OPA query: %s. content: %s", url, input)
-        response = requests.post(url, data=input)
+        response = requests.post(url, json=input)
         self.check_opa_response(response)
 
     def check_opa_response(self, response):
@@ -47,14 +55,24 @@ class OPA(object):
                 self.app.logger.error(opa_error)
                 raise OPAUnexpectedException(opa_error)
 
-            allowed = response.json()
-            self.app.logger.debug("OPA result: %s", allowed)
-            if not allowed:
+            resp_json = response.json()
+            self.app.logger.debug("OPA result: %s", resp_json)
+            if not self.allow_function(resp_json):
                 raise AccessDeniedException()
         except OPAException as e:
-            if self.deny_on_opa_fail:
+            if self._deny_on_opa_fail:
                 raise e
 
+    @property
+    def url(self):
+        return self._url
+
+    @url.setter
+    def url(self, url):
+        self._url = url
+        self.app.logger.debug("OPA URL changed to: %s", url)
+
+    @property
     def input(self):
         return self.input_function()
 
@@ -67,10 +85,13 @@ class OPA(object):
         self._input_function = f
 
     @property
-    def url(self):
-        return self.app.config.get('OPA_URL')
+    def allow_function(self):
+        return self._allow_function
 
-    @url.setter
-    def input(self, url):
-        self.app.config.set('OPA_URL', url)
-        self.app.logger.debug("OPA url changed to: %s", url)
+    @allow_function.setter
+    def allow_function(self, new_allow_function):
+        self._allow_function = new_allow_function
+
+    @classmethod
+    def default_allow_function(cls, response_json):
+        return response_json.get('result', False)

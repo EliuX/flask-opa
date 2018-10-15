@@ -3,3 +3,6 @@ venv
 
 # IDE files
 .idea
+
+#OPA files for testing
+examples/input.json
