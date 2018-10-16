@@ -19,7 +19,10 @@ Run OPA in server mode
    .. code-block:: bash
 
       cd examples
-      opa run -s data.json app.rego
+      opa run -s -w data.json app.rego
+
+  * ``-s`` is to run it in server mode instead of opening the REPL
+  * ``-w`` is for watching the changes of the data/policy files
 
 Specify configuration variables
 '''''''''''''''''''''''''''''''''''''''''''''
@@ -43,6 +46,7 @@ Its easy to bind the Flask-OPA library to your application. Just follow the foll
       opa = OPA(app, parse_input)
 
    Lets see the parameters that we passed to the OPA class:
+
    * ``parse_input`` (Required) contains a method that returns the input data json to be evaluated by the policy, e.g.:
 
    .. code-block:: python

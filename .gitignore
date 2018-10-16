@@ -4,5 +4,14 @@ venv
 # IDE files
 .idea
 
+# OPA
+.opa_history
+
 #OPA files for testing
 examples/input.json
+
+#Python files
+__pycache__
+
+#Code coverage
+.coverage

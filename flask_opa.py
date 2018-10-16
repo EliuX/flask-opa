@@ -39,7 +39,7 @@ class OPA(object):
         self._allow_function = allow_function or self.default_allow_function
         self._deny_on_opa_fail = app.config.get('OPA_DENY_ON_FAIL', True)
         self._url = url or app.config.get('OPA_URL')
-        if app.config.get('OPA_SECURED', False):
+        if self.app.config.get('OPA_SECURED', False):
             self.secured()
 
     @staticmethod
@@ -56,11 +56,6 @@ class OPA(object):
             raise ValueError("Invalid OPA configuration")
         return self
 
-    def secured(self, input_function=None):
-        self.app.before_request(self.check_authorization)
-        if not self.url:
-            raise ValueError('OPA_URL is not present in the configuration')
-
     def check_authorization(self):
         input = self.input
         url = self.url
@@ -71,8 +66,9 @@ class OPA(object):
     def check_opa_response(self, response):
         try:
             if response.status_code != 200:
-                opa_error = "OPA status code: %s. content: %s", \
-                            response.status_code, response.json()
+                opa_error = "OPA status code: {}. content: {}".format(
+                    response.status_code, str(response)
+                )
                 self.app.logger.error(opa_error)
                 raise OPAUnexpectedException(opa_error)
 

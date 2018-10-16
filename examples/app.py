@@ -23,7 +23,7 @@ def parse_input():
 app = Flask(__name__)
 app.config.from_pyfile('app.cfg')
 
-opa = OPA(app, input_function=parse_input)
+opa = OPA(app, input_function=parse_input).secured()
 app.logger.setLevel(logging.DEBUG)
 
 data = {

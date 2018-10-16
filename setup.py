@@ -5,7 +5,7 @@ Flask-OPA
 Flask extension that lets you use Open Policy Agent (OPA) in your project
 as a client
 """
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='Flask-OPA',
@@ -24,6 +24,8 @@ setup(
         'Flask',
         'requests'
     ],
+    setup_requires=["pytest-runner"],
+    tests_require=["pytest", "responses", "coverage"],
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
@@ -32,5 +34,9 @@ setup(
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
-    ]
+    ],
+    project_urls={
+        "Bug Tracker": "https://github.com/EliuX/Flask-OPA/issues",
+        "Source Code": "https://github.com/EliuX/Flask-OPA",
+    }
 )
