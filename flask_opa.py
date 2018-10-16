@@ -2,6 +2,7 @@
 Flask Extension for OPA
 """
 import requests
+from flask.app import Flask
 
 __version__ = "0.1"
 
@@ -28,14 +29,34 @@ class AccessDeniedException(OPAException):
 
 
 class OPA(object):
-    def __init__(self, app, input_function, url=None, allow_function=None):
+    def __init__(self,
+                 app: Flask,
+                 input_function: 'function',
+                 url: str = None,
+                 allow_function: 'function' = None):
         self.app = app
         self._input_function = input_function
         self._allow_function = allow_function or self.default_allow_function
         self._deny_on_opa_fail = app.config.get('OPA_DENY_ON_FAIL', True)
         self._url = url or app.config.get('OPA_URL')
+        if app.config.get('OPA_SECURED', False):
+            self.secured()
 
-    def init_app(self, app):
+    @staticmethod
+    def secured(app: Flask, **kwargs):
+        return OPA(app, kwargs).secured()
+
+    def secured(self, url=None, input_function=None, allow_function=None):
+        self._url = url or self._url
+        self._allow_function = allow_function or self._allow_function
+        self._input_function = input_function or self._input_function
+        if self._url and self._input_function and self._allow_function:
+            self.app.before_request(self.check_authorization)
+        else:
+            raise ValueError("Invalid OPA configuration")
+        return self
+
+    def secured(self, input_function=None):
         self.app.before_request(self.check_authorization)
         if not self.url:
             raise ValueError('OPA_URL is not present in the configuration')

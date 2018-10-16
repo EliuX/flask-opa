@@ -21,9 +21,10 @@ def parse_input():
 
 
 app = Flask(__name__)
-opa = OPA(app, parse_input, url="http://localhost:8181/v1/data/examples/allow")
+app.config.from_pyfile('app.cfg')
+
+opa = OPA(app, input_function=parse_input)
 app.logger.setLevel(logging.DEBUG)
-opa.init_app(app)
 
 data = {
     'eliux': {
