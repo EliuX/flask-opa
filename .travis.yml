@@ -15,6 +15,7 @@ install:
   - pip3 install -e .
   - pip3 install pytest
   - pip3 install responses
+  - pip3 install coverage
   - pip3 install codecov
   - pip3 install flake8
 
@@ -24,8 +25,6 @@ script:
   #Tests and Coverage
   - coverage erase
   - coverage run -m pytest -v
-  #80% of the code should be covered
-  - coverage html --fail-under=85
 
 after_success:
   - codecov
