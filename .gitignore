@@ -1,8 +1,13 @@
+#Python related files
+Flask_OPA.egg-info/
+.eggs/
+htmlcov/
+
 # Virtual Environment
-venv
+venv/
 
 # IDE files
-.idea
+.idea/
 
 # OPA
 .opa_history

@@ -1,5 +1,9 @@
 Flask-OPA
 =========
+.. image:: https://travis-ci.com/EliuX/flask-opa.svg?branch=master
+    :target: https://travis-ci.com/EliuX/flask-opa
+
+
 Simple to use `Flask <http://flask.pocoo.org/>`_ extension that lets you use
 `Open Policy Agent <https://www.openpolicyagent.org>`_ in your project.
 

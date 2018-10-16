@@ -24,8 +24,6 @@ setup(
         'Flask',
         'requests'
     ],
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest", "responses", "coverage", "flake8"],
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
