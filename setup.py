@@ -7,6 +7,10 @@ as a client
 """
 from setuptools import setup, find_packages
 
+def readme():
+    with open('README.rst') as f:
+        return f.read()
+
 setup(
     name='Flask-OPA',
     version='0.1',
@@ -15,8 +19,8 @@ setup(
     author='Eliecer Hernandez',
     author_email='eliecerhdz@gmail.com',
     description='Flask extension to use OPA as a client',
-    long_description=__doc__,
-    py_modules=['flask-opa'],
+    long_description=readme(),
+    py_modules=['flask_opa'],
     zip_safe=False,
     include_package_data=True,
     platforms='any',
