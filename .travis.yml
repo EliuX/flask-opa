@@ -21,9 +21,8 @@ after_success:
 - codecov
 deploy:
   provider: pypi
-  user: "EliuX"
-  distributions: sdist bdist_wheel
+  user: $PYPI_USERNAME
+  password: $PYPI_PASSWORD
+  distributions: "sdist bdist_wheel"
   on: 
-  branch: master
-  password:
-    secure: "cpeTD79epJ36Ob0wxf6kiDUVnor1wNoy04RMOTXKAHvIfkbFpOZMJW7670l97zgTlI7zLEO4qTSZHqEFbnoY/YK2I2jOoaIu0zZjLeLdBS4CgTHV23Xa3u+xZnnNvVv94O1gZWsdZcmXIFiA41KWiD+qAHTS+RaKq2aFxaoVmPilwM9C1krbPqmSkxwbzyMePQOVTN4DgR73KjbltOOjBDOMy+F52/pnZ7eiXh3JhvNuKH2ZW9g3yPRAoELAyDLKKRMzPHweZKorW+lUIjohhbP+ol8rWjt53kVDG4lD/D3nihAAmLeVUc2jI2WyE2L5V4O4kH2GrFhW9YJkWcRnbxkUJ2SA6BEaSdX9JtN5rk4Xg0wgCe8ZVDLTmePeTq+MRh+3oJsY/WyyTFPl7Z3ATPqBQxQesdz+wW8bA77YCSwKbsi1nC6Uuxuetzh2tsqIwsR7uflbW7mv/1JNeNyc1s33VrnWaGvy343G+T0z6RVC8qVN/OueHYoFIY2Ac3bpqJNfuyUWV/r57OsJLpDLc3Q+ILatuXKbzVnhDpr30WbXBbUcb2O6/+ePa72aCQ2lPCRWcKdfX/DFfDbBlnYTElOHLUqTFn+HCudQnfu/WwW7LVyfXw0K8X5ncndwVrPM3uXVhGK3RPzYBvYE1evtslaVGlNdQv8LROHMt5h1xaU="
+    branch: master
