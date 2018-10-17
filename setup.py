@@ -7,23 +7,23 @@ as a client
 """
 from setuptools import setup, find_packages
 
+
 def readme():
-    with open('README.rst') as f:
+    with open('README.md') as f:
         return f.read()
 
 setup(
     name='Flask-OPA',
-    version='0.1',
+    version='0.3',
     url='https://github.com/EliuX/Flask-OPA',
     license='MIT',
     author='Eliecer Hernandez',
     author_email='eliecerhdz@gmail.com',
     description='Flask extension to use OPA as a client',
     long_description=readme(),
+    long_description_content_type="text/markdown",
     py_modules=['flask_opa'],
     zip_safe=False,
-    include_package_data=True,
-    platforms='any',
     install_requires=[
         'Flask',
         'requests'
@@ -35,7 +35,8 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-        'Topic :: Software Development :: Libraries :: Python Modules'
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: System :: Systems Administration :: Authentication/Directory',
     ],
     project_urls={
         "Bug Tracker": "https://github.com/EliuX/Flask-OPA/issues",

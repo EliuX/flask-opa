@@ -2,12 +2,17 @@
 Flask_OPA.egg-info/
 .eggs/
 htmlcov/
+build/
+dist/
 
 # Virtual Environment
 venv/
 
 # IDE files
 .idea/
+
+# Mac OS
+.DS_Store
 
 # OPA
 .opa_history
