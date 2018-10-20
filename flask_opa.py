@@ -1,6 +1,8 @@
 """
 Flask Extension for OPA
 """
+from functools import wraps
+
 import requests
 from flask.app import Flask
 from flask.globals import request
@@ -35,7 +37,9 @@ class OPA(object):
                  input_function: 'function',
                  url: str = None,
                  allow_function: 'function' = None):
+        super(OPA, self).__init__()
         self._app = app
+        self._pep = {}
         self._input_function = input_function
         self._allow_function = allow_function or self.default_allow_function
         self._deny_on_opa_fail = app.config.get('OPA_DENY_ON_FAIL', True)
@@ -65,7 +69,8 @@ class OPA(object):
     def check_authorization(self):
         input = self.input
         url = self.url
-        self._app.logger.debug("OPA query: %s. content: %s", url, input)
+        self._app.logger.debug("%s, OPA query: %s. content: %s",
+                               self.app, url, input)
         response = requests.post(url, json=input)
         self.check_opa_response(response)
 
@@ -87,22 +92,19 @@ class OPA(object):
                 raise e
         return resp_json
 
-    def __call__(self,
-                 f,
-                 url: str,
+    def __call__(self, name: str, url: str,
                  input_function: 'function' = None,
                  allow_function: 'function' = None):
         """Creates a PEP"""
-        pep = PEP(self._app, url,
-                  input_function or self._input_function,
-                  allow_function or self._allow_function)
+        pep = PEP(self, name, url,
+                  input_function,
+                  allow_function)
 
-        def secure_function(*args, **kwargs):
-            nonlocal pep
-            pep.check_authorization()
-            return f(args, kwargs)
+        return pep.secured
 
-        return secure_function
+    @property
+    def pep(self):
+        return self._pep
 
     @property
     def url(self):
@@ -133,6 +135,10 @@ class OPA(object):
     def allow_function(self, new_allow_function):
         self._allow_function = new_allow_function
 
+    @property
+    def app(self):
+        return self._app
+
     @classmethod
     def default_allow_function(cls, response_json):
         return response_json.get('result', False)
@@ -142,14 +148,38 @@ class PEP(OPA):
     """Class to handle Policy Enforcement Points"""
 
     def __init__(self,
-                 app: Flask,
+                 opa: OPA,
+                 name: str,
                  url: str,
                  input_function: 'function' = None,
                  allow_function: 'function' = None):
-        self._app = app
+        self._app = opa.app
+        opa.pep[name] = self
         self._url = url
-        self._input_function = input_function
-        self._allow_function = allow_function
+        self._input_function = input_function or opa.input_function
+        self._allow_function = allow_function or opa.allow_function
+        self._name = name or "PEP"
         if not (self._app and self._url and
                 self._input_function and self._allow_function):
             raise ValueError("Invalid Police Enforcement Point configuration")
+
+    def check_authorization(self, args, **kwargs):
+        _input = self.input(args, kwargs)
+        _url = self.url
+        self._app.logger.debug("%s query: %s. content: %s", self, _url, _input)
+        response = requests.post(_url, json=_input)
+        self.check_opa_response(response)
+
+    def secured(self, f):
+        @wraps(f)
+        def secure_function(*args, **kwargs):
+            self.check_authorization(args, kwargs)
+            return f(args, kwargs)
+        return secure_function
+
+    @property
+    def input(self, args, **kwargs):
+        return self._input_function(args, kwargs)
+
+    def __str__(self):
+        return "<{}>".format(self._name)

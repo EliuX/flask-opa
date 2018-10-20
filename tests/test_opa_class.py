@@ -3,6 +3,7 @@ import responses
 from flask.globals import request
 
 from flask_opa import AccessDeniedException
+from tests.conftest import DATABASE_POLICIES_URL
 
 
 @responses.activate
@@ -39,7 +40,7 @@ def test_opa_denies_access(app):
 
 
 @responses.activate
-def test_opa_server_unavailable_should_deny_access(app):
+def test_opa_server_unavailable_denies_access(app):
     opa_url = app.config.get('OPA_URL')
     responses.add(responses.POST, opa_url, status=404)
 
@@ -54,8 +55,30 @@ def test_app_with_missing_url(app_with_missing_url):
 
 @responses.activate
 @pytest.mark.xfail(raises=AccessDeniedException)
-def test_app_secured_from_configuration(app_secured_from_configuration):
+def test_app_secured_from_configuration_raises_access_denied(app_secured_from_configuration):
     opa_url = app_secured_from_configuration.config.get('OPA_URL')
     responses.add(responses.POST, opa_url, json={'result': False}, status=200)
 
     app_secured_from_configuration.test_client().post('/')
+
+
+@responses.activate
+def test_app_secured_with_pep_allow_access(app_using_pep):
+    responses.add(responses.POST,
+                  DATABASE_POLICIES_URL,
+                  json={'result': True},
+                  status=200)
+
+    app_using_pep.test_client().get('/search')
+
+
+
+@responses.activate
+@pytest.mark.xfail(raises=AccessDeniedException)
+def test_app_secured_with_pep_deny_access(app_using_pep):
+    responses.add(responses.POST,
+                  DATABASE_POLICIES_URL,
+                  json={'result': False},
+                  status=200)
+
+    app_using_pep.test_client().get('/search')
