@@ -3,10 +3,10 @@ package examples
 default allow = false
 
 administrators = ["eliux", "jon"]
-
+ 
 allow {
     input.method = "GET" 
-    input.path = [""]
+    input.path = []
 }
 
 allow {

@@ -14,7 +14,7 @@ def parse_input():
     return {
         "input": {
             "method": request.method,
-            "path": request.path.strip().split("/")[1:],
+            "path": request.path.rstrip('/').strip().split("/")[1:],
             "user": request.headers.get("Authorization", ""),
         }
     }

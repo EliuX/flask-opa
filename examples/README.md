@@ -27,6 +27,22 @@ data using OPA. For commodity purposes the user id will be passed in the request
 - Check the home page
     curl http://localhost:5000
 
+- Check list of users using a non admin user: Denied
+  ```bash
+    curl -X GET \
+      http://localhost:5000/list \
+      -H 'Authorization: paul' \
+      -H 'Content-Type: application/json'
+    ```
+    
+- Check list of users using an admin user: Granted
+  ```bash
+    curl -X GET \
+      http://localhost:5000/list \
+      -H 'Authorization: eliux' \
+      -H 'Content-Type: application/json'
+    ```
+
 - Add a new user (steve) data using an admin user: Granted
     ```bash 
     curl -X POST \
@@ -62,22 +78,6 @@ data using OPA. For commodity purposes the user id will be passed in the request
     curl -X GET \
       http://localhost:5000/data/steve \
       -H 'Authorization: steve' \
-      -H 'Content-Type: application/json'
-    ```
-
-- Check list of users using a non admin user: Denied
-  ```bash
-    curl -X GET \
-      http://localhost:5000/list \
-      -H 'Authorization: paul' \
-      -H 'Content-Type: application/json'
-    ```
-    
-- Check list of users using an admin user: Granted
-  ```bash
-    curl -X GET \
-      http://localhost:5000/list \
-      -H 'Authorization: eliux' \
       -H 'Content-Type: application/json'
     ```
     
