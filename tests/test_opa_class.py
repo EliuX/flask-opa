@@ -1,5 +1,6 @@
 import pytest
 import responses
+from flask.globals import request
 
 from flask_opa import AccessDeniedException
 

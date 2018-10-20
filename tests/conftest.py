@@ -1,9 +1,9 @@
 """
 Fixtures
 """
+import json
 
 import pytest
-from flask import json
 from flask.app import Flask, request
 
 from flask_opa import OPA, OPAException
@@ -37,6 +37,7 @@ def app_with_missing_url():
     init_app(app)
     return app
 
+
 @pytest.fixture
 def app_secured_from_configuration():
     app = Flask(__name__)
@@ -57,4 +58,3 @@ def init_app(app):
         return json.dumps({
             "message": str(e)
         }), 403
-
