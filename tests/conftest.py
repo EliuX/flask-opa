@@ -66,6 +66,10 @@ def init_app(app):
     def handle_opa_exception(e):
         return json.dumps({"message": str(e)}), 403
 
+    @app.errorhandler
+    def handle_unexpected_exception(e):
+        return json.dumps({"message": str(e)}), 500
+
 
 def init_pep(app):
     def input_function_search_pep(*args, **kwargs):
