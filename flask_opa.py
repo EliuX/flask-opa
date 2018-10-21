@@ -1,13 +1,11 @@
 """
 Flask Extension for OPA
 """
-from functools import wraps
 
 import requests
 from flask.app import Flask
-from flask.globals import request
 
-__version__ = "0.3"
+__version__ = "0.4-beta"
 
 
 class OPAException(Exception):
@@ -48,8 +46,8 @@ class OPA(object):
             self.secured()
 
     @staticmethod
-    def secured(app: Flask, **kwargs):
-        return OPA(app, kwargs).secured()
+    def secure(*args, **kwargs):
+        return OPA(*args, **kwargs).secured()
 
     def secured(self,
                 url=None,
@@ -96,11 +94,7 @@ class OPA(object):
                  input_function: 'function' = None,
                  allow_function: 'function' = None):
         """Creates a PEP"""
-        pep = PEP(self, name, url,
-                  input_function,
-                  allow_function)
-
-        return pep.secured
+        return PEP(self, name, url, input_function, allow_function)
 
     @property
     def pep(self):
@@ -111,9 +105,8 @@ class OPA(object):
         return self._url
 
     @url.setter
-    def url(self, url):
-        self._url = url
-        self._app.logger.debug("OPA URL changed to: %s", url)
+    def url(self, value):
+        self._url = value
 
     @property
     def input(self):
@@ -123,17 +116,9 @@ class OPA(object):
     def input_function(self):
         return self._input_function
 
-    @input_function.setter
-    def input_function(self, f):
-        self._input_function = f
-
     @property
     def allow_function(self):
         return self._allow_function
-
-    @allow_function.setter
-    def allow_function(self, new_allow_function):
-        self._allow_function = new_allow_function
 
     @property
     def app(self):
@@ -163,23 +148,22 @@ class PEP(OPA):
                 self._input_function and self._allow_function):
             raise ValueError("Invalid Police Enforcement Point configuration")
 
-    def check_authorization(self, args, **kwargs):
-        _input = self.input(args, kwargs)
+    def check_authorization(self, *args, **kwargs):
+        _input = self.input(*args, **kwargs)
         _url = self.url
         self._app.logger.debug("%s query: %s. content: %s", self, _url, _input)
         response = requests.post(_url, json=_input)
         self.check_opa_response(response)
 
-    def secured(self, f):
-        @wraps(f)
+    def __call__(self, f):
         def secure_function(*args, **kwargs):
-            self.check_authorization(args, kwargs)
-            return f(args, kwargs)
+            self.check_authorization(*args, **kwargs)
+            return f(*args, **kwargs)
+
         return secure_function
 
-    @property
-    def input(self, args, **kwargs):
-        return self._input_function(args, kwargs)
+    def input(self, *args, **kwargs):
+        return self._input_function(*args, **kwargs)
 
     def __str__(self):
         return "<{}>".format(self._name)

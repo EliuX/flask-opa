@@ -66,11 +66,15 @@ def init_app(app):
     def handle_opa_exception(e):
         return json.dumps({"message": str(e)}), 403
 
+    @app.errorhandler
+    def handle_unexpected_exception(e):
+        return json.dumps({"message": str(e)}), 500
+
 
 def init_pep(app):
     def input_function_search_pep(*args, **kwargs):
         input = parse_input()
-        input["text"] = kwargs["text"]  # or args[0]
+        input["text"] = kwargs.get("text") or args[0]
         return input
 
     secured_query = app.opa("Database PEP",
@@ -79,11 +83,11 @@ def init_pep(app):
 
     @secured_query
     def query_data(text):
-        return ["Element1 with %s" % text,
-                "Element2 with %s" % text,
-                "Element3 with %s" % text]
+        return ["%s at the beginning" % text,
+                "The word %s in the middle" % text,
+                "In the end %s" % text]
 
     @app.route("/search")
     def search_page():
-        result = query_data()
-        json.dumps({"result": result}), 200
+        result = query_data(text=request.args.get('q'))
+        return json.dumps({"result": result}), 200

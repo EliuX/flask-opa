@@ -68,7 +68,7 @@ If you want to try a demo check the code in `examples`, but for development:
     If you want enforce the OPA security in your application you can create the OPA instance like this:
     
     ```python
-    opa = OPA.secured(app, parse_input, url="http://localhost:8181/v1/data/package_name/allow")
+    opa = OPA.secure(app, parse_input, url="http://localhost:8181/v1/data/package_name/allow")
     ```
     
     or
@@ -92,7 +92,7 @@ If you want to try a demo check the code in `examples`, but for development:
 Pre-release or Beta: The project has gone through multiple rounds of active development with a goal of reaching
 a stable release version, but is not there yet.
 
-Path of Development: Active (October 16st 2018)
+Path of Development: Active (October 20th 2018)
 
 ## Author
 
