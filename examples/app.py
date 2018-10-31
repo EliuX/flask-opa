@@ -9,6 +9,7 @@ from flask import Flask, request
 
 from flask_opa import OPA, OPAException
 
+
 def parse_input():
     return {
         "input": {
@@ -37,6 +38,7 @@ data = {
     }
 }
 
+
 @app.route("/")
 def welcome_page():
     return "Hello Flask-OPA user! Lets see some data. " \
@@ -63,7 +65,7 @@ def show_data_of(who):
 @app.route("/data/<who>", methods=['POST'])
 def set_data_of(who):
     data[who] = json.loads(request.data)
-    utils.log_remotely("Updated user %s with data {%s}" % who, request.data)
+    utils.log_remotely("Updated user %s with data {%s}" % (who, request.data))
     return json.dumps(data[who])
 
 
@@ -80,9 +82,8 @@ def delete(who):
 
 @app.errorhandler(OPAException)
 def handle_opa_exception(e):
-    return json.dumps({
-        "message": str(e)
-    }), 403
+    return json.dumps({"message": str(e)}), 403
+
 
 if __name__ == '__main__':
     app.run(debug=True)

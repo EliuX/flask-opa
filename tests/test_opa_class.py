@@ -1,5 +1,6 @@
 import pytest
 import responses
+from flask import json
 from flask.app import Flask
 
 from flask_opa import AccessDeniedException, OPA
@@ -93,17 +94,44 @@ def test_app_secured_with_pep_allow_access(app_using_pep):
 
 
 @responses.activate
-@pytest.mark.xfail(raises=AccessDeniedException)
-def test_app_deny_access_on_pep(app_using_pep):
+def test_when_pep_fails_and_deny_on_opa_fail_is_false_then_result_not_returned(app_using_pep):
+    app_using_pep.opa.pep["Database PEP"]._deny_on_opa_fail = False
+
     opa_url = app_using_pep.config.get('OPA_URL')
-    responses.add(responses.POST, opa_url, json={'result': True}, status=200)
+    responses.add(responses.POST,
+                  opa_url,
+                  json={'result': True},
+                  status=200)
 
     responses.add(responses.POST,
                   DATABASE_POLICIES_URL,
                   json={'result': False},
                   status=200)
 
-    app_using_pep.test_client().get('/search?q=lorem')
+    response = app_using_pep.test_client().get('/search?q=lorem')
+
+    assert 200 == response.status_code
+    assert None == json.loads(response.data).get("result", "")
+
+
+@responses.activate
+def test_when_pep_fails_and_deny_on_opa_fail_is_true_then_return_403(app_using_pep):
+    app_using_pep.opa.pep["Database PEP"]._deny_on_opa_fail = True
+
+    opa_url = app_using_pep.config.get('OPA_URL')
+    responses.add(responses.POST,
+                  opa_url,
+                  json={'result': True},
+                  status=200)
+
+    responses.add(responses.POST,
+                  DATABASE_POLICIES_URL,
+                  json={'result': False},
+                  status=200)
+
+    response = app_using_pep.test_client().get('/search?q=lorem')
+
+    assert 403 == response.status_code
 
 
 @pytest.mark.xfail(raises=ValueError)

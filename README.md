@@ -100,9 +100,9 @@ def log_remotely(content):
     app.logger.info("Logged remotely: %s", content)
 ```
 
-to decorate it we must implement a PEP using our `OPA` instance as a function (callable mode), the parameters
-will be pretty much the same used to secure the application. With the resulting object we annotate our function of
-interest:
+to decorate it we must implement a [PEP][PEP] using our `OPA` instance as a 
+function (callable mode). The parameters will be pretty much the same as the used ones to secure the application. 
+The resulting object will decorate our function(s) of interest:
 
 ```python
 def validate_logging_input_function(*arg, **kwargs):
@@ -117,20 +117,22 @@ secure_logging = app.opa("Logging PEP", app.config["OPA_URL_LOGGING"], validate_
 
 @secure_logging
 def log_remotely(content):
-    # Imagine a code to log this remotely
+    # Imagine a code to log content remotely
     app.logger.info("Logged remotely: %s", content)
 ```
 
-The only thing we need to implement to do so is a new input function, which can be very versatile: in our example it
-provides info related to the user request and info provided by the parameters of the decorated function.
-Check the [logging_test.rego](examples/logging_test.rego) to check the valid and invalid queries.
+As you might have noticed, the only thing we truly require for adding the [PEP][PEP] is a new input function. This function
+can provide a more versatile input than the one used by the opa instance created for the whole app: in our example it 
+provides info related to the user request and info provided by the parameters of the decorated function as well.
+
+Check the [logging_test.rego](examples/logging_test.rego) to check other valid and invalid queries.
 
 ## Status
 
 Pre-release or Beta: The project has gone through multiple rounds of active development with a goal of reaching
 a stable release version, but is not there yet.
 
-Path of Development: Active (October 20th 2018)
+Path of Development: Active (October 31th 2018)
 
 ## Author
 
@@ -147,3 +149,4 @@ Eliecer Hernandez Garbey
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 
+[PEP]: https://tools.ietf.org/html/rfc2904#section-4.4

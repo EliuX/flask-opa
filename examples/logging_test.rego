@@ -6,7 +6,7 @@ test_default_denied {
 
 test_admin_user_allowed {
     allow with input as {"user": "eliux"}
-    allow with input as {"user": "jon", "content":"..."}
+    allow with input as {"user": "jon", "content": "..."}
 }
 
 test_non_admin_users_denied { 

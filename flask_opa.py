@@ -70,24 +70,23 @@ class OPA(object):
         self._app.logger.debug("%s, OPA query: %s. content: %s",
                                self.app, url, input)
         response = requests.post(url, json=input)
-        self.check_opa_response(response)
-
-    def check_opa_response(self, response):
-        resp_json = None
         try:
-            if response.status_code != 200:
-                opa_error = "OPA status code: {}. content: {}".format(
-                    response.status_code, str(response)
-                )
-                self._app.logger.error(opa_error)
-                raise OPAUnexpectedException(opa_error)
-            resp_json = response.json()
-            self._app.logger.debug("OPA result: %s", resp_json)
-            if not self.allow_function(resp_json):
-                raise AccessDeniedException()
+            self.check_opa_response(response)
         except OPAException as e:
             if self.deny_on_opa_fail:
                 raise e
+
+    def check_opa_response(self, response):
+        if response.status_code != 200:
+            opa_error = "OPA status code: {}. content: {}".format(
+                response.status_code, str(response)
+            )
+            self._app.logger.error(opa_error)
+            raise OPAUnexpectedException(opa_error)
+        resp_json = response.json()
+        self._app.logger.debug("OPA result: %s", resp_json)
+        if not self.allow_function(resp_json):
+            raise AccessDeniedException()
         return resp_json
 
     def __call__(self, name: str, url: str,
@@ -163,8 +162,12 @@ class PEP(OPA):
 
     def __call__(self, f):
         def secure_function(*args, **kwargs):
-            self.check_authorization(*args, **kwargs)
-            return f(*args, **kwargs)
+            try:
+                self.check_authorization(*args, **kwargs)
+                return f(*args, **kwargs)
+            except OPAException as e:
+                if self.deny_on_opa_fail:
+                    raise e
 
         return secure_function
 
