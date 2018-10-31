@@ -1,12 +1,12 @@
 package examples
 
+import data.administrators
+
 default allow = false
-
-administrators = ["eliux", "jon"]
-
+ 
 allow {
     input.method = "GET" 
-    input.path = [""]
+    input.path = []
 }
 
 allow {
