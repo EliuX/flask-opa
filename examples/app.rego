@@ -1,8 +1,8 @@
 package examples
 
-default allow = false
+import data.administrators
 
-administrators = ["eliux", "jon"]
+default allow = false
  
 allow {
     input.method = "GET" 

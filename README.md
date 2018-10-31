@@ -86,6 +86,44 @@ If you want to try a demo check the code in `examples`, but for development:
     ```
 
 1. Run your Flask application.
+    
+## Policy Enforcement point
+
+
+Imagine [sample](/examples) function that is in charge of a logging content related to actions done by a user. In
+this case we must create a different input functions that provide useful information for the policies that will decide
+if a log should be sent or not to a remote server. Imagine that the logging function be something like:
+
+```python
+def log_remotely(content):
+    # Imagine a code to log this remotely
+    app.logger.info("Logged remotely: %s", content)
+```
+
+to decorate it we must implement a PEP using our `OPA` instance as a function (callable mode), the parameters
+will be pretty much the same used to secure the application. With the resulting object we annotate our function of
+interest:
+
+```python
+def validate_logging_input_function(*arg, **kwargs):
+   return {
+        "input": {
+            "user": request.headers.get("Authorization", ""),
+            "content": arg[0]
+        }
+    }
+
+secure_logging = app.opa("Logging PEP", app.config["OPA_URL_LOGGING"], validate_logging_input_function)
+
+@secure_logging
+def log_remotely(content):
+    # Imagine a code to log this remotely
+    app.logger.info("Logged remotely: %s", content)
+```
+
+The only thing we need to implement to do so is a new input function, which can be very versatile: in our example it
+provides info related to the user request and info provided by the parameters of the decorated function.
+Check the [logging_test.rego](examples/logging_test.rego) to check the valid and invalid queries.
 
 ## Status
 

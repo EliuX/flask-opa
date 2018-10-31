@@ -86,7 +86,7 @@ class OPA(object):
             if not self.allow_function(resp_json):
                 raise AccessDeniedException()
         except OPAException as e:
-            if self._deny_on_opa_fail:
+            if self.deny_on_opa_fail:
                 raise e
         return resp_json
 
@@ -107,6 +107,10 @@ class OPA(object):
     @url.setter
     def url(self, value):
         self._url = value
+
+    @property
+    def deny_on_opa_fail(self):
+        return self._deny_on_opa_fail
 
     @property
     def input(self):
@@ -137,12 +141,14 @@ class PEP(OPA):
                  name: str,
                  url: str,
                  input_function: 'function' = None,
-                 allow_function: 'function' = None):
+                 allow_function: 'function' = None,
+                 deny_on_opa_fail: bool = False):
         self._app = opa.app
         opa.pep[name] = self
         self._url = url
         self._input_function = input_function or opa.input_function
         self._allow_function = allow_function or opa.allow_function
+        self._deny_on_opa_fail = deny_on_opa_fail or False
         self._name = name or "PEP"
         if not (self._app and self._url and
                 self._input_function and self._allow_function):
@@ -164,6 +170,10 @@ class PEP(OPA):
 
     def input(self, *args, **kwargs):
         return self._input_function(*args, **kwargs)
+
+    @property
+    def deny_on_opa_fail(self):
+        return self._deny_on_opa_fail
 
     def __str__(self):
         return "<{}>".format(self._name)

@@ -1,7 +1,6 @@
 import pytest
 import responses
 from flask.app import Flask
-from flask.globals import request
 
 from flask_opa import AccessDeniedException, OPA
 from tests.conftest import DATABASE_POLICIES_URL, parse_input, init_app
@@ -95,26 +94,29 @@ def test_app_secured_with_pep_allow_access(app_using_pep):
 
 @responses.activate
 @pytest.mark.xfail(raises=AccessDeniedException)
-def test_app_secured_with_pep_deny_access(app_using_pep):
+def test_app_deny_access_on_pep(app_using_pep):
+    opa_url = app_using_pep.config.get('OPA_URL')
+    responses.add(responses.POST, opa_url, json={'result': True}, status=200)
+
     responses.add(responses.POST,
                   DATABASE_POLICIES_URL,
                   json={'result': False},
                   status=200)
 
-    app_using_pep.test_client().get('/search')
+    app_using_pep.test_client().get('/search?q=lorem')
 
 
 @pytest.mark.xfail(raises=ValueError)
 def test_app_without_opa_input_function_raise_value_error(app):
     app = Flask(__name__)
-    app.config["OPA_SECURED"] = True
-    app.config["OPA_URL"] = 'http://localhost:8181/v1/data/examples/allow'
+    app.config['OPA_SECURED'] = True
+    app.config['OPA_URL'] = 'http://localhost:8181/v1/data/examples/allow'
     app.opa = OPA(app, input_function=None).secured()
 
 
 @pytest.mark.xfail(raises=ValueError)
 def test_app_with_pep_with_no_url_raise_value_error(app):
-    app.opa("Database PEP", "")
+    app.opa('Database PEP', '')
 
 
 @responses.activate
@@ -129,6 +131,6 @@ def test_change_app_opa_url(app):
 
 
 def test_opa_with_pep_name(app_using_pep):
-    pep = app_using_pep.opa.pep["Database PEP"]
+    pep = app_using_pep.opa.pep['Database PEP']
 
     assert "Database PEP" in str(pep)
