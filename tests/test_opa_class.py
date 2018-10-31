@@ -111,7 +111,7 @@ def test_when_pep_fails_and_deny_on_opa_fail_is_false_then_result_not_returned(a
     response = app_using_pep.test_client().get('/search?q=lorem')
 
     assert 200 == response.status_code
-    assert None == json.loads(response.data).get("result", "")
+    assert json.loads(response.data).get("result", "") is None
 
 
 @responses.activate

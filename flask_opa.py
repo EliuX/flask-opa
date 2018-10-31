@@ -32,9 +32,9 @@ class AccessDeniedException(OPAException):
 class OPA(object):
     def __init__(self,
                  app: Flask,
-                 input_function: 'function',
+                 input_function,
                  url: str = None,
-                 allow_function: 'function' = None):
+                 allow_function=None):
         super(OPA, self).__init__()
         self._app = app
         self._pep = {}
@@ -90,8 +90,8 @@ class OPA(object):
         return resp_json
 
     def __call__(self, name: str, url: str,
-                 input_function: 'function' = None,
-                 allow_function: 'function' = None):
+                 input_function=None,
+                 allow_function=None):
         """Creates a PEP"""
         return PEP(self, name, url, input_function, allow_function)
 
@@ -139,8 +139,8 @@ class PEP(OPA):
                  opa: OPA,
                  name: str,
                  url: str,
-                 input_function: 'function' = None,
-                 allow_function: 'function' = None,
+                 input_function=None,
+                 allow_function=None,
                  deny_on_opa_fail: bool = False):
         self._app = opa.app
         opa.pep[name] = self
