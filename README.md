@@ -89,10 +89,9 @@ If you want to try a demo check the code in `examples`, but for development:
     
 ## Policy Enforcement point
 
-
-Imagine [sample](/examples) function that is in charge of a logging content related to actions done by a user. In
-this case we must create a different input functions that provide useful information for the policies that will decide
-if a log should be sent or not to a remote server. Imagine that the logging function be something like:
+For practical purposes, lets imagine a [sample](/examples) function that is in charge of logging content related to actions done by users. In
+this case we must create a different input functions that provide useful information for certain policies that will decide
+if a log should be sent or not to a remote server. Lets suppose that the logging function is something like:
 
 ```python
 def log_remotely(content):
@@ -101,8 +100,8 @@ def log_remotely(content):
 ```
 
 to decorate it we must implement a [PEP][PEP] using our `OPA` instance as a 
-function (callable mode). The parameters will be pretty much the same as the used ones to secure the application. 
-The resulting object will decorate our function(s) of interest:
+function (callable mode). The parameters are pretty much the same as those used to secure the application. 
+The resulting instance will serve as decorator of our function of interest:
 
 ```python
 def validate_logging_input_function(*arg, **kwargs):
@@ -122,10 +121,10 @@ def log_remotely(content):
 ```
 
 As you might have noticed, the only thing we truly require for adding the [PEP][PEP] is a new input function. This function
-can provide a more versatile input than the one used by the opa instance created for the whole app: in our example it 
+can provide a more versatile input than the one used by the `OPA` instance created for the whole app: in our example it 
 provides info related to the user request and info provided by the parameters of the decorated function as well.
 
-Check the [logging_test.rego](examples/logging_test.rego) to check other valid and invalid queries.
+Read the [examples README](examples/README.md) for more detailed information about how to run a demo.
 
 ## Status
 
