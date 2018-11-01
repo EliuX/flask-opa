@@ -14,7 +14,7 @@ def readme():
 
 setup(
     name='Flask-OPA',
-    version='0.5-beta',
+    version='0.4',
     url='https://github.com/EliuX/Flask-OPA',
     license='MIT',
     author='Eliecer Hernandez',

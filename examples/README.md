@@ -158,7 +158,7 @@ routing was executed successfully.
 ```
 
 For the previous request the `OPA` policies of the application (app.rego) will allow steve to see its own data. 
-Nonetheless, as steve is not an administrator and no admin user was referenced in the added content, the previous 
+Nonetheless, as steve is not an administrator and no admin user was referenced in the added content the previous 
 request wont be logged. 
 
 1. Lets try the previous request but this time with an admin user.
