@@ -5,7 +5,7 @@ Flask Extension for OPA
 import requests
 from flask.app import Flask
 
-__version__ = "0.4"
+__version__ = "0.5"
 
 
 class OPAException(Exception):
@@ -69,10 +69,10 @@ class OPA(object):
         url = self.url
         self._app.logger.debug("%s, OPA query: %s. content: %s",
                                self.app, url, input)
-        response = requests.post(url, json=input)
         try:
+            response = requests.post(url, json=input)
             self.check_opa_response(response)
-        except OPAException as e:
+        except (OPAException, requests.exceptions.ConnectionError) as e:
             if self.deny_on_opa_fail:
                 raise e
 
