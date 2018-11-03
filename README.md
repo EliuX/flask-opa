@@ -138,6 +138,14 @@ well.
 
 Read the [examples README](examples/README.md) for more detailed information about how to run a demo.
 
+## Makefile
+
+The Makefile contains multiple useful actions you might need. Check them with 
+
+```bash
+ make help   
+```
+
 ## Status
 
 Pre-release or Beta: The project has gone through multiple rounds of active development with a goal of reaching
