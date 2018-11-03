@@ -13,9 +13,8 @@ install:
 - pip3 install codecov
 - pip3 install flake8
 script:
-- flake8 flask_opa.py --count
-- coverage erase
-- coverage run -m pytest -v
+- make lint
+- make coverage
 after_success:
 - codecov
 deploy:

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 OPA is expected to be running on default port 8181
 """

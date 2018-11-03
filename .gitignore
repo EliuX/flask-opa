@@ -11,17 +11,21 @@ venv/
 # IDE files
 .idea/
 
-# Mac OS
+# OS related files
 .DS_Store
+
+# Runtime
+nohup.out
+.Makefile.swp
 
 # OPA
 .opa_history
 
-#OPA files for testing
+# OPA files for testing
 examples/input.json
 
-#Python files
+# Python files
 __pycache__
 
-#Code coverage
+# Code coverage
 .coverage
