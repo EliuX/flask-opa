@@ -5,16 +5,8 @@ before_install:
 - sudo apt-get update
 - sudo apt-get install -y git
 - sudo apt-get install -y curl
-install:
-- pip3 install -e .
-- pip3 install pytest
-- pip3 install responses
-- pip3 install coverage
-- pip3 install codecov
-- pip3 install flake8
-script:
-- make lint
-- make coverage
+install: make install-dev
+script: make build
 after_success:
 - codecov
 deploy:
