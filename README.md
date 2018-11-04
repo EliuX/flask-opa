@@ -5,12 +5,23 @@ Flask-OPA
 [![PyPI Version](http://img.shields.io/pypi/v/Flask-OPA.svg)](https://pypi.python.org/pypi/Flask-OPA)
 
 Simple to use [Flask](http://flask.pocoo.org/>) extension that lets you secure your projects with
-[Open Policy Agent](https://www.openpolicyagent.org).
+[Open Policy Agent](https://www.openpolicyagent.org). It allows 
+* HTTP API Authorization
+* Policy Enforcement Point (AOP using decorators on methods)
 
+## Quick start 
 
-## How to demo
+Its recommended for you to try the app in the package `examples`. Thanks to the `Makefile` you can run the demo project 
+with the following command
 
-For a quick start its recommended for you to try the app in `examples`:
+```bash
+ make demo   
+```
+
+### How it works?
+
+For a better understanding of what `make demo` does and how you should setup `flask_opa` in your project, follow the 
+next steps:
 
 1. Run OPA in server mode
 
@@ -87,10 +98,11 @@ For a quick start its recommended for you to try the app in `examples`:
 1. Run your Flask application.
     
 ## Policy Enforcement point
-
-For practical purposes, lets imagine a sample function that is in charge of logging content related to actions done by users. In
-this case we must create a different input functions that provide useful information for certain policies that will decide
-if a log should be sent or not to a remote server. Lets suppose that such logging function is something like:
+One of the features this module provides is [Policy Enforcement Point][PEP] which basically allows you to ensure policies
+at any method of your application.
+For practical purposes, lets imagine a sample method that is in charge of logging content related to actions done by 
+users. In this case we must create a different input functions that provide useful information for certain policies that 
+will decide if a log should be sent or not to a remote server. Lets suppose that such logging method is something like:
 
 ```python
 def log_remotely(content):
@@ -125,6 +137,14 @@ example it provides data related to the user request and data provided by the pa
 well.
 
 Read the [examples README](examples/README.md) for more detailed information about how to run a demo.
+
+## Makefile
+
+The Makefile contains multiple useful actions you might need. Check them with 
+
+```bash
+ make help   
+```
 
 ## Status
 

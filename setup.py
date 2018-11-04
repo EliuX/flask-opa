@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Flask-OPA
 -------------
@@ -14,7 +15,7 @@ def readme():
 
 setup(
     name='Flask-OPA',
-    version='0.4',
+    version='0.5',
     url='https://github.com/EliuX/Flask-OPA',
     license='MIT',
     author='Eliecer Hernandez',
