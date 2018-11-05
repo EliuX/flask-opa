@@ -34,7 +34,8 @@ class OPA(object):
                  app: Flask,
                  input_function,
                  url: str = None,
-                 allow_function=None):
+                 allow_function=None,
+                 wait_time: int = 20000):
         super(OPA, self).__init__()
         self._app = app
         self._pep = {}
@@ -42,6 +43,7 @@ class OPA(object):
         self._allow_function = allow_function or self.default_allow_function
         self._deny_on_opa_fail = app.config.get('OPA_DENY_ON_FAIL', True)
         self._url = url or app.config.get('OPA_URL')
+        self._wait_time = wait_time or app.config.get('OPA_WAIT_TIME')
         if self._app.config.get('OPA_SECURED', False):
             self.secured()
 
@@ -70,9 +72,18 @@ class OPA(object):
         self._app.logger.debug("%s, OPA query: %s. content: %s",
                                self.app, url, input)
         try:
-            response = requests.post(url, json=input)
-            self.check_opa_response(response)
-        except (OPAException, requests.exceptions.ConnectionError) as e:
+            response = self.query_opa(url, input)
+            if response is not None:
+                self.check_opa_response(response)
+        except OPAException as e:
+            if self.deny_on_opa_fail:
+                raise e
+
+    def query_opa(self, url, input):
+        self._app.logger.debug("%s query: %s. content: %s", self, url, input)
+        try:
+            return requests.post(url, json=input, timeout=self.wait_time)
+        except requests.exceptions.ConnectionError as e:
             if self.deny_on_opa_fail:
                 raise e
 
@@ -111,6 +122,10 @@ class OPA(object):
     def deny_on_opa_fail(self):
         return self._deny_on_opa_fail
 
+    @deny_on_opa_fail.setter
+    def deny_on_opa_fail(self, value):
+        self._deny_on_opa_fail = value
+
     @property
     def input(self):
         return self.input_function()
@@ -127,6 +142,14 @@ class OPA(object):
     def app(self):
         return self._app
 
+    @property
+    def wait_time(self):
+        return self._wait_time
+
+    @wait_time.setter
+    def wait_time(self, value):
+        self._wait_time = value
+
     @classmethod
     def default_allow_function(cls, response_json):
         return response_json.get('result', False)
@@ -142,12 +165,14 @@ class PEP(OPA):
                  input_function=None,
                  allow_function=None,
                  deny_on_opa_fail: bool = False):
+        super(OPA, self).__init__()
         self._app = opa.app
         opa.pep[name] = self
         self._url = url
         self._input_function = input_function or opa.input_function
         self._allow_function = allow_function or opa.allow_function
         self._deny_on_opa_fail = deny_on_opa_fail or False
+        self._wait_time = opa.wait_time
         self._name = name or "PEP"
         if not (self._app and self._url and
                 self._input_function and self._allow_function):
@@ -155,10 +180,9 @@ class PEP(OPA):
 
     def check_authorization(self, *args, **kwargs):
         _input = self.input(*args, **kwargs)
-        _url = self.url
-        self._app.logger.debug("%s query: %s. content: %s", self, _url, _input)
-        response = requests.post(_url, json=_input)
-        self.check_opa_response(response)
+        response = self.query_opa(self.url, _input)
+        if response is not None:
+            self.check_opa_response(response)
 
     def __call__(self, f):
         def secure_function(*args, **kwargs):
@@ -173,10 +197,6 @@ class PEP(OPA):
 
     def input(self, *args, **kwargs):
         return self._input_function(*args, **kwargs)
-
-    @property
-    def deny_on_opa_fail(self):
-        return self._deny_on_opa_fail
 
     def __str__(self):
         return "<{}>".format(self._name)

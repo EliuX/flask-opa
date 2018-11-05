@@ -50,12 +50,10 @@ def app_secured_from_configuration():
     init_app(app)
     return app
 
-
 @pytest.fixture
 def app_using_pep(app):
     init_pep(app)
     return app
-
 
 def init_app(app):
     @app.route("/")

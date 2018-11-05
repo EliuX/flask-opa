@@ -1,9 +1,10 @@
 import pytest
+import requests
 import responses
 from flask import json
 from flask.app import Flask
 
-from flask_opa import AccessDeniedException, OPA
+from flask_opa import AccessDeniedException, OPA, OPAUnexpectedException
 from tests.conftest import DATABASE_POLICIES_URL, parse_input, init_app
 
 
@@ -48,16 +49,6 @@ def test_opa_create_with_staticmethod_deny_access():
 def test_opa_denies_access(app):
     opa_url = app.config.get('OPA_URL')
     responses.add(responses.POST, opa_url, json={'result': False}, status=200)
-
-    response = app.test_client().post('/')
-
-    assert 403 == response.status_code
-
-
-@responses.activate
-def test_opa_server_unavailable_denies_access(app):
-    opa_url = app.config.get('OPA_URL')
-    responses.add(responses.POST, opa_url, status=404)
 
     response = app.test_client().post('/')
 
@@ -149,7 +140,7 @@ def test_app_with_pep_with_no_url_raise_value_error(app):
 
 @responses.activate
 def test_change_app_opa_url(app):
-    app.opa.url = 'http://localhost:8181/v1/data/examples2/allow'
+    app.opa.url = app.config.get('OPA_URL')
     responses.add(responses.POST, app.opa.url,
                   json={'result': True}, status=200)
 
@@ -158,7 +149,36 @@ def test_change_app_opa_url(app):
     assert 200 == response.status_code
 
 
+@responses.activate
+@pytest.mark.xfail(raises=OPAUnexpectedException)
+def test_app_retrieves_non_ok_value_should_raise_error(app):
+    app.opa.url = app.config.get('OPA_URL')
+
+    responses.add(responses.POST, app.opa.url,
+                  json={'result': True}, status=404)
+
+    response = app.test_client().get('/')
+
+    assert 200 == response.status_code
+
+
+@pytest.mark.xfail(raises=requests.exceptions.ConnectionError)
+def test_app_that_denies_on_fail_when_no_connection_then_deny_access(app):
+    app.opa.deny_on_opa_fail = True
+
+    app.test_client().get('/')
+
+
 def test_opa_with_pep_name(app_using_pep):
     pep = app_using_pep.opa.pep['Database PEP']
 
     assert "Database PEP" in str(pep)
+
+
+def test_app_using_pep_that_doesnt_denies_on_fail_when_no_connection_then_grant_access(app_using_pep):
+    app_using_pep.opa.deny_on_opa_fail = False
+    app_using_pep.opa.pep["Database PEP"].deny_on_opa_fail = False
+
+    response = app_using_pep.test_client().get('/')
+
+    assert 200 == response.status_code
