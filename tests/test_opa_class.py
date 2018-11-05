@@ -159,7 +159,7 @@ def test_app_retrieves_non_ok_value_should_raise_error(app):
 
     response = app.test_client().get('/')
 
-    assert 200 == response.status_code
+    assert 403 == response.status_code
 
 
 @pytest.mark.xfail(raises=requests.exceptions.ConnectionError)
