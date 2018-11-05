@@ -12,7 +12,7 @@ stop-opa:
 	kill $(ps | grep opa | awk '{print $1}')
 
 .PHONY: demo
-demo: start-opa
+demo: start-opa 
 	export FLASK_ENV=development
 	export FLASK_APP=examples/app.py
 	flask run
@@ -55,11 +55,11 @@ push-test:
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 .PHONY: help
-help:
+help: 
 	@echo "make start-opa"
 	@echo "       starts the opa server"
 	@echo "make stop-opa"
-	@echo "       stops the opa server"
+	@echo "       stops the opa server" 
 	@echo "make demo"
 	@echo "       runs the demo project"
 	@echo "make test"
