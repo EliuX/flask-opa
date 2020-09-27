@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2018 Eliecer Hernandez Garbey
+Copyright (c) 2020 Eliecer Hernandez Garbey
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

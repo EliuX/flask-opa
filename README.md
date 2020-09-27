@@ -146,13 +146,6 @@ The Makefile contains multiple useful actions you might need. Check them with
  make help   
 ```
 
-## Status
-
-Pre-release or Beta: The project has gone through multiple rounds of active development with a goal of reaching
-a stable release version, but is not there yet.
-
-Path of Development: Active (October 31th 2018)
-
 ## Author
 
 Eliecer Hernandez Garbey
