@@ -4,7 +4,7 @@ import responses
 from flask import json
 from flask.app import Flask
 
-from flask_opa import AccessDeniedException, OPA, OPAUnexpectedException
+from flask_opa import AccessDeniedException, OPA, OPAUnexpectedException, OPAServerUnavailableException
 from tests.conftest import DATABASE_POLICIES_URL, parse_input, init_app
 
 
@@ -125,17 +125,16 @@ def test_when_pep_fails_and_deny_on_opa_fail_is_true_then_return_403(app_using_p
     assert 403 == response.status_code
 
 
-@pytest.mark.xfail(raises=ValueError)
 def test_app_without_opa_input_function_raise_value_error(app):
-    app = Flask(__name__)
-    app.config['OPA_SECURED'] = True
-    app.config['OPA_URL'] = 'http://localhost:8181/v1/data/examples/allow'
-    app.opa = OPA(app, input_function=None).secured()
+    with pytest.raises(ValueError):
+        app.config['OPA_SECURED'] = True
+        app.config['OPA_URL'] = 'http://localhost:8181/v1/data/examples/allow'
+        app.opa = OPA(app, input_function=None).secured()
 
 
-@pytest.mark.xfail(raises=ValueError)
 def test_app_with_pep_with_no_url_raise_value_error(app):
-    app.opa('Database PEP', '')
+    with pytest.raises(ValueError):
+        app.opa('Database PEP', '')
 
 
 @responses.activate
@@ -162,11 +161,19 @@ def test_app_retrieves_non_ok_value_should_raise_error(app):
     assert 403 == response.status_code
 
 
-@pytest.mark.xfail(raises=requests.exceptions.ConnectionError)
+@responses.activate
 def test_app_that_denies_on_fail_when_no_connection_then_deny_access(app):
     app.opa.deny_on_opa_fail = True
+    app.opa.url = app.config.get('OPA_URL')
 
-    app.test_client().get('/')
+    error_when_opa_server_is_down = requests.exceptions.ConnectionError("OPA server down")
+    responses.add(responses.POST, app.opa.url,
+                  body=error_when_opa_server_is_down)
+
+    response = app.test_client().get('/')
+
+    assert 'OPA server down' == json.loads(response.data).get("message", "")
+    assert 403 == response.status_code
 
 
 def test_opa_with_pep_name(app_using_pep):
