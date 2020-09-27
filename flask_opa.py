@@ -69,8 +69,6 @@ class OPA(object):
     def check_authorization(self):
         input = self.input
         url = self.url
-        self._app.logger.debug("%s, OPA query: %s. content: %s",
-                               self.app, url, input)
         try:
             response = self.query_opa(url, input)
             if response is not None:
@@ -80,7 +78,7 @@ class OPA(object):
                 raise e
 
     def query_opa(self, url, input):
-        self._app.logger.debug("%s query: %s. content: %s", self, url, input)
+        self._app.logger.debug("%s query: %s. content: %s", self.app, url, input)
         try:
             return requests.post(url, json=input, timeout=self.wait_time)
         except requests.exceptions.ConnectionError as e:
@@ -95,7 +93,7 @@ class OPA(object):
             self._app.logger.error(opa_error)
             raise OPAUnexpectedException(opa_error)
         resp_json = response.json()
-        self._app.logger.debug("OPA result: %s", resp_json)
+        self._app.logger.debug(" => %s", resp_json)
         if not self.allow_function(resp_json):
             raise AccessDeniedException()
         return resp_json
