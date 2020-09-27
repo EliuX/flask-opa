@@ -138,6 +138,34 @@ well.
 
 Read the [examples README](examples/README.md) for more detailed information about how to run a demo.
 
+## Error handling
+All errors related to OPA extend from `OPAException`. They will always be thrown unless the app variable 
+`OPA_DENY_ON_FAIL` or `app.opa.deny_on_opa_fail` is set to `False`.
+
+### Types of `OPAException` errors
+* `AccessDeniedException`: When the `allow_function` returns `False`, indicating that a policy denies the access.
+* `OPAServerUnavailableException`: When it cannot connect to the OPA Server.
+* `OPAUnexpectedException`: When the response of the OPA server is not `OK`, i.e. the status code is not `200`.
+
+### Handling OPA Exceptions
+
+With the `errorhandler` decorator of the Flask app, you can easily catch any of these errors, e.g.:
+
+```python
+@app.errorhandler(OPAException)
+def handle_opa_exception(e):
+    return json.dumps({"message": str(e)}), 403
+```
+
+or particular ones:
+
+```python
+@app.errorhandler(OPAServerUnavailableException)
+def handle_opa_exception_conn(e):
+    app.logger.debug("Issue connecting to the OPA server: %s", e)
+    return "Authorization cannot be enforced", 403
+```
+
 ## Makefile
 
 The Makefile contains multiple useful actions you might need. Check them with 

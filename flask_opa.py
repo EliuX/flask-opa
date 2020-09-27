@@ -29,6 +29,13 @@ class AccessDeniedException(OPAException):
         super().__init__(message)
 
 
+class OPAServerUnavailableException(OPAException):
+    """When it cannot connect to the OPA Server"""
+
+    def __init__(self, message='OPA Server unavailable'):
+        super().__init__(message)
+
+
 class OPA(object):
     def __init__(self,
                  app: Flask,
@@ -78,12 +85,13 @@ class OPA(object):
                 raise e
 
     def query_opa(self, url, input):
-        self._app.logger.debug("%s query: %s. content: %s", self.app, url, input)
+        self._app.logger.debug("%s query: %s. content: %s",
+                               self.app, url, input)
         try:
             return requests.post(url, json=input, timeout=self.wait_time)
         except requests.exceptions.ConnectionError as e:
             if self.deny_on_opa_fail:
-                raise e
+                raise OPAServerUnavailableException(str(e))
 
     def check_opa_response(self, response):
         if response.status_code != 200:
