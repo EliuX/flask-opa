@@ -8,17 +8,20 @@ as a client
 """
 from setuptools import setup, find_packages
 
+__version__ = "0.6.0"
+
 
 def readme():
     with open('README.md') as f:
         return f.read()
 
+
 setup(
     name='Flask-OPA',
-    version='0.6',
+    version=__version__,
     url='https://github.com/EliuX/Flask-OPA',
     license='MIT',
-    author='Eliecer Hernandez',
+    author='Eliecer Hernandez Garbey',
     author_email='eliecerhdz@gmail.com',
     description='Flask extension to use OPA as a client',
     long_description=readme(),

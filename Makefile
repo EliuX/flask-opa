@@ -41,6 +41,11 @@ install-dev: install
 	pip3 install --upgrade codecov
 	pip3 install --upgrade flake8
 	pip3 install --upgrade responses
+	pip3 install --upgrade python-semantic-release
+
+.PHONY: semver-test
+semver-test:
+	semantic-release version --noop
 
 .PHONY: push
 push:
@@ -74,3 +79,5 @@ help:
 	@echo "      install all requirements for development"
 	@echo "make build"
 	@echo "      runs lints, tests and coverage"
+	@echo "semver-test"
+	@echo "      Checks whether the SEMVER update can be done"
