@@ -1,11 +1,10 @@
 """
 Flask Extension for OPA
 """
-
 import requests
 from flask.app import Flask
 
-__version__ = "0.6"
+__version__ = "0.6.0"
 
 
 class OPAException(Exception):

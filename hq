@@ -1,0 +1,221 @@
+[33mcommit 31dd0d5f86859bf7eda69b89d9054bcdfe54edfd[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/setup-semver-v1[m[33m)[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Mon Mar 15 22:19:49 2021 -0400
+
+    ci: Add semantic-release for SEMVER
+
+[33mcommit 3d43fd06dbf8be72f260ed53106e56e363e9a0a5[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Mon Mar 15 22:15:01 2021 -0400
+
+    docs: Update README
+
+[33mcommit b0a75616620ed6ca84ac5ac4cf24ffa43582f24f[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sun Sep 27 02:01:59 2020 -0500
+
+    Enable skip_existing in Travis
+
+[33mcommit 864c3392944436e2c98c71399ab1a502c54e8892[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sun Sep 27 01:38:40 2020 -0500
+
+    Close #8 Document about OPAException errors
+
+[33mcommit a1b0b501487f7cdc30dd1ea19f8fcc765625161f[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sun Sep 27 01:02:40 2020 -0500
+
+    Fix tests
+
+[33mcommit 37fc11a3f8e0f82a055ecfcbeee40c9978941634[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sat Sep 26 23:30:19 2020 -0500
+
+    Close #9 Skip redundant log
+
+[33mcommit 1c581b33ae70c98cbf27a588ccad41a02443a75b[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sat Sep 26 23:05:31 2020 -0500
+
+    Update copyright year and .gitignore
+
+[33mcommit f4073f2172cfb65148f53d069320444ee2a4759b[m[33m ([m[1;31morigin/feature/opa_wait_time[m[33m, [m[1;32mfeature/opa_wait_time[m[33m, [m[1;32mfeature/improve-code-coverage-to-100percent[m[33m)[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sun Nov 4 23:20:59 2018 -0500
+
+    Fix failing test
+
+[33mcommit fb993cb726d497af2c04c342648cc69a49747069[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sun Nov 4 23:12:09 2018 -0500
+
+    Upgrade to v0.6
+
+[33mcommit 28ac1dda039932157d340c4aec05c601a3a2596c[m
+Merge: c251b39 095d514
+Author: Eliecer Hernandez <ehernandez@stackbuilders.com>
+Date:   Sun Nov 4 23:11:18 2018 -0500
+
+    Merge branch 'master' into feature/opa_wait_time
+
+[33mcommit c251b399e1f21996ae42f6e5720c29d2ee9d4285[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sun Nov 4 22:57:15 2018 -0500
+
+    Add support for wait_time #2
+
+[33mcommit 095d5148ff0e292e16822df419ed423492254518[m
+Author: Eliecer Hernandez <ehernandez@stackbuilders.com>
+Date:   Sun Nov 4 12:29:07 2018 -0500
+
+    Set theme jekyll-theme-tactile
+
+[33mcommit 5b0042beebed2024a80a04738b3e9754221460f8[m
+Author: Eliecer Hernandez <ehernandez@stackbuilders.com>
+Date:   Sun Nov 4 11:58:09 2018 -0500
+
+    Set theme jekyll-theme-cayman
+
+[33mcommit 2a88bc2376ae9b5b5065abb8bbb849a118132757[m
+Author: Eliecer Hernandez <ehernandez@stackbuilders.com>
+Date:   Sun Nov 4 11:39:28 2018 -0500
+
+    Set theme jekyll-theme-minimal
+
+[33mcommit 7eedb8a2b47d50f07f85e766579b5d441a667b62[m
+Author: Eliecer Hernandez <ehernandez@stackbuilders.com>
+Date:   Sun Nov 4 00:22:23 2018 -0500
+
+    Add makefile (#4)
+    
+    * Allow skipping errors on connections to OPA
+    * Add Makefile compliant with OPA contrib standards
+    * Reference Makefile help command in README for assistance
+
+[33mcommit 55aaad9f8624e07a55f70c91cacd11d4b6e700a3[m[33m ([m[1;31morigin/gh-pages[m[33m, [m[1;31morigin/add-makefile[m[33m, [m[1;32mgh-pages[m[33m, [m[1;32madd-makefile[m[33m)[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sat Nov 3 18:16:24 2018 -0500
+
+    Reference Makefile help command in README for assistance
+
+[33mcommit 30b23d206cbe1f7bb5b3bdcfeae2c928261624ea[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sat Nov 3 17:54:49 2018 -0500
+
+    Upgrade Makefile to be compliant with OPA contrib standards
+
+[33mcommit 963d7ac41d6943196ba13791019874c6620ce0d1[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sat Nov 3 16:53:25 2018 -0500
+
+    Add Makefile
+
+[33mcommit 59330e507a6c7d77db4aa031f66cb7a16388c5f0[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sat Nov 3 16:25:35 2018 -0500
+
+    Allow skipping errors on connections to OPA
+
+[33mcommit 8f714cb7ce6bfa1ce44d90f687c80444eed8b689[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Wed Oct 31 21:15:44 2018 -0500
+
+    Release v0.4
+
+[33mcommit c83d44606356a3c53ce8078d12a5fbe4af488eaa[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sat Oct 20 19:43:33 2018 -0500
+
+    Full coverage
+
+[33mcommit 0df8a56a67f57b1000a669b370ad8c6a7ae7ca39[m
+Author: Eliecer Hernandez <ehernandez@stackbuilders.com>
+Date:   Wed Oct 31 11:41:33 2018 -0500
+
+    Add PEP support
+    
+    Add class PEP to module
+    * Add and test new example policies for logging
+    * Full coverage
+    * Fix codebase, tests and documentation related to PEP
+    * Upgrade to version 0.5-beta
+    * Update READMEs
+
+[33mcommit 2b4150e1b90d2db1036a35b9ba45df9272c53769[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Tue Oct 16 21:50:22 2018 -0500
+
+    Fix .travis.yml
+
+[33mcommit 716f09f5d84e75a81f7904c70d9a51f1ce182582[m
+Author: EliuX <ehernandez@ioet.com>
+Date:   Tue Oct 16 19:20:41 2018 -0500
+
+    Update configuration to deploy in PyPi
+
+[33mcommit 15f437b4449f7b2b82dbe69307bef9c69cd502bd[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Tue Oct 16 01:34:08 2018 -0500
+
+    Set README.rst as long description
+
+[33mcommit 8f96ab60e973699b6ad0a1190813b646f7e2f1fa[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Tue Oct 16 01:16:00 2018 -0500
+
+    Fix coverage in Travis CI config
+
+[33mcommit d9703287df7289458d0b63f3ef129d117d651e45[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Tue Oct 16 00:49:17 2018 -0500
+
+    Add Travis CI support
+
+[33mcommit 4def147aa745466900b17c1f54c857a5af3cd033[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Tue Oct 16 00:34:39 2018 -0500
+
+    Fix flake8 warnings
+
+[33mcommit dcedee0412886cba365b1664857960a90f41e621[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Tue Oct 16 00:17:42 2018 -0500
+
+    Add Pytests and Coverage
+
+[33mcommit b7066b446653f7f4dd9db56561e2d54e9c4a8eae[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Mon Oct 15 21:31:45 2018 -0500
+
+    Allow to enforce security by configuration
+
+[33mcommit 66868eddc72caa1499df58a6c6396b5105a2c5a8[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Mon Oct 15 01:52:42 2018 -0500
+
+    Update README
+
+[33mcommit b30463ce5a86172f9fc590146b3ee0fc64791491[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Mon Oct 15 01:42:56 2018 -0500
+
+    Add MIT License
+
+[33mcommit d3f078fc0af3d86fdcbc3f19d12ee085449e474b[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Mon Oct 15 01:38:00 2018 -0500
+
+    Add example files and fix extension module
+
+[33mcommit 2338dc5e5481d44324ab8ea752d81181d0c02aec[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sat Oct 13 22:28:49 2018 -0500
+
+    Add OPA class and related exceptions
+
+[33mcommit 8a17e69fc4d48ec092c07de4b36c713a8da1d13d[m
+Author: EliuX <eliecerhdz@gmail.com>
+Date:   Sat Oct 13 19:44:36 2018 -0500
+
+    First commit: Setup project structure
