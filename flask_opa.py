@@ -4,7 +4,7 @@ Flask Extension for OPA
 import requests
 from flask.app import Flask
 
-__version__ = "0.6.0"
+__version__ = "1.0.0"
 
 
 class OPAException(Exception):
