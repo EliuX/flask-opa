@@ -4,15 +4,15 @@ Flask-OPA
 [![codecov](https://codecov.io/gh/EliuX/flask-opa/branch/master/graph/badge.svg)](https://codecov.io/gh/EliuX/flask-opa)
 [![PyPI Version](http://img.shields.io/pypi/v/Flask-OPA.svg)](https://pypi.python.org/pypi/Flask-OPA)
 
-Simple to use [Flask](http://flask.pocoo.org/>) extension that lets you secure your projects with
+Simple to use [Flask](http://flask.pocoo.org) extension that lets you secure your projects with
 [Open Policy Agent](https://www.openpolicyagent.org). It allows 
 * HTTP API Authorization
 * Policy Enforcement Point (AOP using decorators on methods)
 
 ## Quick start 
 
-Its recommended for you to try the app in the package `examples`. Thanks to the `Makefile` you can run the demo project 
-with the following command
+Its recommended for you to try out the app in the package `examples`. Thanks to the `Makefile` you can run the demo 
+project with the following command
 
 ```bash
  make demo   
@@ -20,7 +20,7 @@ with the following command
 
 ### How it works?
 
-For a better understanding of what `make demo` does and how you should setup `flask_opa` in your project, follow the 
+For a better understanding of what `make demo` does and how, you should set up `flask_opa` in your project. Follow the 
 next steps:
 
 1. Run OPA in server mode
@@ -37,7 +37,7 @@ next steps:
       - `-s` is to run it in server mode instead of opening the REPL
       - `-w` is for watching the changes of the data/policy files
 
-1. Specify configuration variables
+1. Specify the configuration variables
 
     * `OPA_URL` url accessible in your running OPA server, used to evaluate your input. It includes the path of the 
      policy, e.g. `http://localhost:8181/v1/data/examples/allow`.
@@ -48,61 +48,61 @@ next steps:
 
 1. Bind the OPA class to your Flask application
 
-    Its easy to bind the Flask-OPA library to your application. Just follow the following steps:
+    It is easy to bind the Flask-OPA library to your application. Just follow the following steps:
 
-1. Create the OPA instance
-
-    ```python
-    app = Flask(__name__)
-    app.config.from_pyfile('app.cfg')
-    opa = OPA(app, parse_input)
-    ```
-
-    Lets see the parameters that we passed to the OPA class:
-    
-    - `parse_input` (Required) contains a method that returns the input data json to be evaluated by the policy, e.g.:
-
-    ```json
-    {
-        "input": {
-          "method": "GET",
-          "path": ["data", "jon"],
-          "user": "paul"
-        }
-    }
-    ```
-    
-    - `url` (Optional) to use an specific url instead of the `OPA_URL` optionally specified in the app configuration.
-    - `allow_function` (Optional) predicate that determinate if the response from OPA allows (True) or denies (False) the request
-    
-    If you want enforce the OPA security in your application you can create the OPA instance like this:
-    
-    ```python
-    opa = OPA.secure(app, parse_input, url="http://localhost:8181/v1/data/package_name/allow")
-    ```
-    
-    or
-    
-    ```python
-    opa = OPA(app, parse_input, url="http://localhost:8181/v1/data/package_name/allow").secured()
-    ```
-    
-    otherwise OPA will enforce your security only if ``OPA_SECURED`` is `True`.
-    
-    Specify the logging level to `DEBUG` if you want to get access to Flask-OPA logs of its operations using
-    
-    ```python
-    app.logger.setLevel(logging.DEBUG)
-    ```
-
-1. Run your Flask application.
+   1. Create the OPA instance
+   
+       ```python
+       app = Flask(__name__)
+       app.config.from_pyfile('app.cfg')
+       opa = OPA(app, parse_input)
+       ```
+   
+       Let's see the parameters that we passed to the OPA class:
+       
+       - `parse_input` (Required) contains a method that returns the input data json to be evaluated by the policy, e.g.:
+   
+       ```json
+       {
+           "input": {
+             "method": "GET",
+             "path": ["data", "jon"],
+             "user": "paul"
+           }
+       }
+       ```
+       
+       - `url` (Optional) to use an specific url instead of the `OPA_URL` optionally specified in the app configuration.
+       - `allow_function` (Optional) predicate that determinate if the response from OPA allows (True) or denies (False) the request
+       
+       If you want enforce the OPA security in your application you can create the OPA instance like this:
+       
+       ```python
+       opa = OPA.secure(app, parse_input, url="http://localhost:8181/v1/data/package_name/allow")
+       ```
+       
+       or
+       
+       ```python
+       opa = OPA(app, parse_input, url="http://localhost:8181/v1/data/package_name/allow").secured()
+       ```
+       
+       otherwise, OPA will enforce your security only if ``OPA_SECURED`` is `True`.
+       
+       Specify the logging level to `DEBUG` if you want to get access to Flask-OPA logs of its operations using
+       
+       ```python
+       app.logger.setLevel(logging.DEBUG)
+       ```
+   
+   1. Run your Flask application.
     
 ## Policy Enforcement point
-One of the features this module provides is [Policy Enforcement Point][PEP] which basically allows you to ensure policies
-at any method of your application.
-For practical purposes, lets imagine a sample method that is in charge of logging content related to actions done by 
+One of the features this module provides is [Policy Enforcement Point][PEP], which basically allows you to ensure 
+policies at any method of your application.
+For practical purposes, lets imagine a sample method that is in charge of logging content related to some actions done by 
 users. In this case we must create a different input functions that provide useful information for certain policies that 
-will decide if a log should be sent or not to a remote server. Lets suppose that such logging method is something like:
+will decide if a log should be sent or not to a remote server. Let's suppose that such logging method is something like:
 
 ```python
 def log_remotely(content):
@@ -110,9 +110,9 @@ def log_remotely(content):
     app.logger.info("Logged remotely: %s", content)
 ```
 
-to decorate it we will create a [PEP][PEP] decorator using our `OPA` instance as a function (callable mode). 
-The parameters are pretty much the same as those used to secure the application. The resulting instance will decorate 
-our function of interest:
+Let's create a [PEP][PEP] decorator using our `OPA` instance as a function (callable mode) that will intercept every 
+call to `log_remotely`. The parameters are pretty much the same as those used to secure the application. The resulting 
+instance will decorate our function of interest:
 
 ```python
 def validate_logging_input_function(*arg, **kwargs):
@@ -183,6 +183,7 @@ Eliecer Hernandez Garbey
 - Main website: [EliuX Overflow](http://eliux.github.io)
 - Twitter: [@eliux_black](https://twitter.com/eliux_black)
 - LinkedIn: [eliecer-hernández-garbey-16172686](https://www.linkedin.com/in/eliecer-hern%C3%A1ndez-garbey-16172686/)
+- StackOverflow: [EliuX](https://stackoverflow.com/users/3233398/eliux)
 
 ## License
 
